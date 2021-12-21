@@ -1,56 +1,46 @@
-let snake;
-let food;
 const SCREEN_SCALE = 20;
 const SCREEN_SIZE = 600;
+let snake;
+let food;
 
-function setup(){
-    createCanvas(SCREEN_SIZE,SCREEN_SIZE);
-    snake = new Snake();
+function setup() {
+  createCanvas(SCREEN_SIZE, SCREEN_SIZE);
+  snake = new Snake();
+  frameRate(10);
+  pickLocation();
 }
 
-function draw(){
-    background(51);
-    snake.setValues();
-    snake.print();
+function pickLocation() {
+  let cols = floor(width / SCREEN_SCALE);
+  let rows = floor(height / SCREEN_SCALE);
+  food = createVector(floor(random(cols)), floor(random(rows)));
+  food.mult(SCREEN_SCALE);
 }
 
-function Snake() {
-    this.x = 0;
-    this.y = 0;
-    this.xspeed = 1;
-    this.yspeed = 0;
-
-    this.setDirection = function(x, y){
-        this.xspeed=x;
-        this.yspeed=y;
-    }
-
-    this.setValues = function(x,y){
-        this.x <= + SCREEN_SIZE ? this.x += this.xspeed : this.x=0;
-        this.y <= + SCREEN_SIZE ? this.y += this.yspeed : this.y=0;
-    }
-
-    this.print = function() {
-        fill(255);
-        rect(this.x, this.y, 10, 10);
-    }
-
-
+function mousePressed() {
+  snake.total++;
 }
 
-function keyPressed(){
-    switch(keyCode){
-        case UP_ARROW:
-            snake.setDirection(0, -1);
-            break;
-        case DOWN_ARROW:
-            snake.setDirection(0, 1);
-            break;
-        case RIGHT_ARROW:
-            snake.setDirection(1, 0);
-            break;
-        case LEFT_ARROW:
-            snake.setDirection(-1, 0);
-            break;
-    }
+function draw() {
+  background(51);
+  if (snake.onEat(food)) {
+    pickLocation();
+  }
+  snake.onDeath();
+  snake.updatePos();
+  snake.print();
+  fill(255, 0, 100);
+  rect(food.x, food.y, SCREEN_SCALE, SCREEN_SCALE);
+}
+
+function keyPressed() {
+  if (keyCode === UP_ARROW) {
+    snake.setDirection(0, -1);
+  } else if (keyCode === DOWN_ARROW) {
+    snake.setDirection(0, 1);
+  } else if (keyCode === RIGHT_ARROW) {
+    snake.setDirection(1, 0);
+  } else if (keyCode === LEFT_ARROW) {
+    snake.setDirection(-1, 0);
+  }
 }
