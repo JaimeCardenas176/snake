@@ -42,10 +42,9 @@ function Snake() {
   
       this.x = this.x + this.xspeed * SCREEN_SCALE;
       this.y = this.y + this.yspeed * SCREEN_SCALE;
-  
-      this.x = constrain(this.x, 0, width - SCREEN_SCALE);
-      this.y = constrain(this.y, 0, height - SCREEN_SCALE);
-    };
+      this.checkBounds();
+      
+    }
   
     this.print = function() {
       fill(255);
@@ -53,5 +52,18 @@ function Snake() {
         rect(this.tail[i].x, this.tail[i].y, SCREEN_SCALE, SCREEN_SCALE);
       }
       rect(this.x, this.y, SCREEN_SCALE, SCREEN_SCALE);
-    };
+    }
+
+    this.checkBounds = function(){
+      
+      if(this.x > SCREEN_SIZE) this.x=0;
+
+      if(this.x < 0) this.x=SCREEN_SIZE;
+
+      if(this.y > SCREEN_SIZE) this.y=0;
+
+      if(this.y < 0) this.y=SCREEN_SIZE;
+    }
+
   }
+
